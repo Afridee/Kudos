@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "827602342951",
+    "firebase_url": "https://kudos-bccef.firebaseio.com",
+    "project_id": "kudos-bccef",
+    "storage_bucket": "kudos-bccef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827602342951:android:b1e9ec4f9eea1d76476a02",
+        "android_client_info": {
+          "package_name": "com.madebyahmedafridee.kudos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "827602342951-2bhp16ij4bslf679ga6m78n0kkrubbjo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.madebyahmedafridee.kudos",
+            "certificate_hash": "551d0f1adba9bce89221694bf704848d4c67f670"
+          }
+        },
+        {
+          "client_id": "827602342951-aaq0o4snd8g84sk1ca8b0gqcf13iq1au.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfSCaF0FSPaHQPxq4bmWo6a58nPpHjmNk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827602342951-aaq0o4snd8g84sk1ca8b0gqcf13iq1au.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
