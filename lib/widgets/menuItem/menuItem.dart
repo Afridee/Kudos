@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kudos/Animation/FadeAnimation.dart';
 import 'package:kudos/Constants.dart';
+import 'package:kudos/widgets/menuItem/menuItemFunctionality.dart';
 import 'package:kudos/widgets/menuItem/menuItemState.dart';
 
 class menuItem extends StatefulWidget {
@@ -54,7 +55,8 @@ class _menuItemState extends State<menuItem> {
                   height: 100,
                   child: Center(
                     child: CircularProgressIndicator(
-                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.white),
                       backgroundColor: primaryDark,
                     ),
                   ),
@@ -137,7 +139,14 @@ class _menuItemState extends State<menuItem> {
                   width: 30,
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    addToCart(
+                      context: context,
+                      name: widget.itemName,
+                      price: widget.price.toDouble(),
+                      qty: MS.qty,
+                    );
+                  },
                   child: Container(
                     height: 40,
                     width: 130,

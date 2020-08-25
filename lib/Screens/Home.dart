@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kudos/Constants.dart';
+import 'package:kudos/Screens/Cart/Cart.dart';
 import 'package:kudos/Screens/homeStateManagement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,12 +60,19 @@ class _HomeState extends State<Home> {
               ),
               actions: <Widget>[
                 IconButton(
-                  icon: Icon(
-                    Icons.shopping_cart,
-                    color: Colors.white,
+                  icon: Hero(
+                    tag: 'cartIcon',
+                    child: Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
                   ),
                   onPressed: () {
-                    signOut(context);
+                    var route = new MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                      new Cart(),
+                    );
+                    Navigator.of(context).push(route);
                   },
                 )
               ],
