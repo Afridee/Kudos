@@ -50,7 +50,7 @@ Future<void> signOut(BuildContext context) async {
   final _firebaseAuth = FirebaseAuth.instance;
   try {
     await _firebaseAuth.signOut();
-    //Navigator.of(context).pop();
+    Navigator.of(context).pop();
   } catch (e) {
     print(e);
   }

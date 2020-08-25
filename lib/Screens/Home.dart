@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:kudos/Screens/loginPages/loginFunctionalities.dart';
+import 'package:kudos/widgets/drawer.dart';
 import 'package:kudos/widgets/menuItem/menuItem.dart';
 
 class Home extends StatefulWidget {
@@ -131,12 +132,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               )),
-          drawer: Drawer(
-            elevation: 0.0,
-            child: Container(
-              decoration: BoxDecoration(color: primaryDark),
-            ),
-          ),
+          drawer: mainDrawer(),
           body: Container(
             decoration: BoxDecoration(
               image: DecorationImage(

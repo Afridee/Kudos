@@ -1,4 +1,5 @@
 import 'package:kudos/Screens/Home.dart';
+import 'package:kudos/Screens/chooseBranchPage/chooseBranchScreen.dart';
 import 'package:kudos/Screens/loginPages/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _entry_phase_1State extends State<entry_phase_1> {
       builder: (_, AsyncSnapshot<User> snapshot){
         if(snapshot.connectionState == ConnectionState.active){
           final User user = snapshot.data;
-          return user == null? login_page() : Home();
+          return user == null? login_page() : chooseBranch();
         }else{
           return Scaffold(
               body: Container(
