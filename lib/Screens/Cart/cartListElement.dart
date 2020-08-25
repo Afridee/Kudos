@@ -6,14 +6,14 @@ import 'package:kudos/Screens/Cart/cartListElementFunctionality.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class cartListItem extends StatefulWidget {
-  final String brandName;
+  final String itemName;
   final int qty;
   final double price;
   final cartStateClass CS;
 
   const cartListItem({
     Key key,
-    @required this.brandName,
+    @required this.itemName,
     @required this.qty,
     @required this.price,
     @required this.CS,
@@ -48,7 +48,7 @@ class _cartListItemState extends State<cartListItem> {
               ),
               isThreeLine: true,
               title: Text(
-                widget.brandName + ' x ' + widget.qty.toString(),
+                widget.itemName + ' x ' + widget.qty.toString(),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -57,42 +57,34 @@ class _cartListItemState extends State<cartListItem> {
        Expanded(
          flex: 2,
          child: Container(
-           child: Observer(builder: (context){
-             return !CIS.itemSpinner? Row(
-               children: <Widget>[
-                 Container(
-                   child: IconButton(
-                     color: primaryDark,
-                     icon: Icon(Icons.add_circle),
-                     onPressed: () async{
-                       CIS.resetItemSpinner();
-                       final DocumentReference  cartItem = Firestore.instance.document('users/${widget.CS.userID}/cart/${widget.brandName}');
-                       bool updated = await add(cartItem);
-                       if(updated){
-                         widget.CS.updateTotalCost('add', widget.price.toDouble());
-                       }
-                       CIS.resetItemSpinner();
-                     },
-                   ),
+           child: Row(
+             children: <Widget>[
+               Container(
+                 child: IconButton(
+                   color: primaryDark,
+                   icon: Icon(Icons.add_circle),
+                   onPressed: (){
+                     bool updated = add(widget.itemName, widget.qty, widget.price);
+                     if(updated){
+                       widget.CS.updateTotalCost('add', widget.price.toDouble());
+                     }
+                   },
                  ),
-                 Container(
-                   child: IconButton(
-                     color: primaryDark,
-                     icon: Icon(Icons.remove_circle),
-                     onPressed: () async{
-                       CIS.resetItemSpinner();
-                       final DocumentReference  cartItem = Firestore.instance.document('users/${widget.CS.userID}/cart/${widget.brandName}');
-                       bool updated = await remove(cartItem);
-                       if(updated){
-                         widget.CS.updateTotalCost('deduct', widget.price.toDouble());
-                       }
-                       CIS.resetItemSpinner();
-                     },
-                   ),
-                 )
-               ],
-             ) : Center(child: CircularProgressIndicator());
-           }),
+               ),
+               Container(
+                 child: IconButton(
+                   color: primaryDark,
+                   icon: Icon(Icons.remove_circle),
+                   onPressed: (){
+                     bool updated = remove(widget.itemName, widget.qty, widget.price);
+                     if(updated){
+                       widget.CS.updateTotalCost('deduct', widget.price.toDouble());
+                     }
+                   },
+                 ),
+               )
+             ],
+           ),
          ),
        ),
       ],

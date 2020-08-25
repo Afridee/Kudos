@@ -15,9 +15,6 @@ abstract class cartState with Store{
   @observable
   double totalCost = 0.0;
 
-  @observable
-  bool itemSpinner = false;
-
   @action
   getUserID(BuildContext context) async{
     final auth  = Provider.of<FirebaseAuthService>(context, listen: false);
@@ -33,8 +30,4 @@ abstract class cartState with Store{
     }
   }
 
-  @action
-  void resetItemSpinner(){
-    itemSpinner = !itemSpinner;
-  }
 }

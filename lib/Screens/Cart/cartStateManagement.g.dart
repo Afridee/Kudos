@@ -39,21 +39,6 @@ mixin _$cartStateClass on cartState, Store {
     });
   }
 
-  final _$itemSpinnerAtom = Atom(name: 'cartState.itemSpinner');
-
-  @override
-  bool get itemSpinner {
-    _$itemSpinnerAtom.reportRead();
-    return super.itemSpinner;
-  }
-
-  @override
-  set itemSpinner(bool value) {
-    _$itemSpinnerAtom.reportWrite(value, super.itemSpinner, () {
-      super.itemSpinner = value;
-    });
-  }
-
   final _$getUserIDAsyncAction = AsyncAction('cartState.getUserID');
 
   @override
@@ -75,22 +60,10 @@ mixin _$cartStateClass on cartState, Store {
   }
 
   @override
-  void resetItemSpinner() {
-    final _$actionInfo = _$cartStateActionController.startAction(
-        name: 'cartState.resetItemSpinner');
-    try {
-      return super.resetItemSpinner();
-    } finally {
-      _$cartStateActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 userID: ${userID},
-totalCost: ${totalCost},
-itemSpinner: ${itemSpinner}
+totalCost: ${totalCost}
     ''';
   }
 }
