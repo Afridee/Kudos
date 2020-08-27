@@ -44,11 +44,9 @@ class _HomeState extends State<Home> {
         length: 5,
         child: Scaffold(
           appBar: AppBar(
-              title: Text(
-                HS.title,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-              ),
+              title: Observer(builder: (context) {
+                return HS.search_text;
+              }),
               elevation: 0.0,
               backgroundColor: Colors.transparent,
               flexibleSpace: Container(
@@ -60,6 +58,17 @@ class _HomeState extends State<Home> {
                 ),
               ),
               actions: <Widget>[
+                Observer(builder: (context) {
+                  return IconButton(
+                    icon: Hero(
+                      tag: 'searchIcon',
+                      child: HS.custom_Icon,
+                    ),
+                    onPressed: () {
+                      HS.seacrchIconState();
+                    },
+                  );
+                }),
                 IconButton(
                   icon: Hero(
                     tag: 'cartIcon',
@@ -70,8 +79,7 @@ class _HomeState extends State<Home> {
                   ),
                   onPressed: () {
                     var route = new MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                      new Cart(),
+                      builder: (BuildContext context) => new Cart(),
                     );
                     Navigator.of(context).push(route);
                   },
@@ -146,29 +154,45 @@ class _HomeState extends State<Home> {
               builder: (context) {
                 return StreamBuilder(
                     stream: Firestore.instance
-                        .collection('Menu')
-                        .where('category', isEqualTo: HS.category)
-                        .snapshots(),
+                            .collection('Menu')
+                            .where('category', isEqualTo: HS.category)
+                            .snapshots(),
                     builder: (context, snapshot) {
                       return snapshot.hasData && snapshot.data != null
                           ? ListView.builder(
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context, index) {
-                                return menuItem(
-                                  img: snapshot.data.documents[index]['img'],
-                                  itemName: snapshot.data.documents[index]['itemName'],
-                                  desc: snapshot.data.documents[index]['desc'],
-                                  price: snapshot.data.documents[index]['price'],
-                                );
+                                return Observer(builder: (context) {
+                                  return snapshot
+                                          .data.documents[index]['itemName']
+                                          .toString()
+                                          .trim()
+                                          .toLowerCase()
+                                          .contains(HS.searchQuery
+                                              .trim()
+                                              .toLowerCase())
+                                      ? menuItem(
+                                          img: snapshot.data.documents[index]
+                                              ['img'],
+                                          itemName: snapshot.data
+                                              .documents[index]['itemName'],
+                                          desc: snapshot.data.documents[index]
+                                              ['desc'],
+                                          price: snapshot.data.documents[index]
+                                              ['price'],
+                                        )
+                                      : Container();
+                                });
                               })
                           : Container(
-                           child: Center(
-                           child: CircularProgressIndicator(
-                             valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                             backgroundColor: primaryDark,
-                           ),
-                         ),
-                      );
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                  backgroundColor: primaryDark,
+                                ),
+                              ),
+                            );
                     });
               },
             ),
@@ -178,5 +202,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-

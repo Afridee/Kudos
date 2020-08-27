@@ -39,7 +39,63 @@ mixin _$homeStateClass on homeState, Store {
     });
   }
 
+  final _$custom_IconAtom = Atom(name: 'homeState.custom_Icon');
+
+  @override
+  Icon get custom_Icon {
+    _$custom_IconAtom.reportRead();
+    return super.custom_Icon;
+  }
+
+  @override
+  set custom_Icon(Icon value) {
+    _$custom_IconAtom.reportWrite(value, super.custom_Icon, () {
+      super.custom_Icon = value;
+    });
+  }
+
+  final _$search_textAtom = Atom(name: 'homeState.search_text');
+
+  @override
+  Widget get search_text {
+    _$search_textAtom.reportRead();
+    return super.search_text;
+  }
+
+  @override
+  set search_text(Widget value) {
+    _$search_textAtom.reportWrite(value, super.search_text, () {
+      super.search_text = value;
+    });
+  }
+
+  final _$searchQueryAtom = Atom(name: 'homeState.searchQuery');
+
+  @override
+  String get searchQuery {
+    _$searchQueryAtom.reportRead();
+    return super.searchQuery;
+  }
+
+  @override
+  set searchQuery(String value) {
+    _$searchQueryAtom.reportWrite(value, super.searchQuery, () {
+      super.searchQuery = value;
+    });
+  }
+
   final _$homeStateActionController = ActionController(name: 'homeState');
+
+  @override
+  void seacrchIconState() {
+    final _$actionInfo = _$homeStateActionController.startAction(
+        name: 'homeState.seacrchIconState');
+    try {
+      return super.seacrchIconState();
+    } finally {
+      _$homeStateActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setCategory(int i) {
@@ -67,7 +123,10 @@ mixin _$homeStateClass on homeState, Store {
   String toString() {
     return '''
 title: ${title},
-category: ${category}
+category: ${category},
+custom_Icon: ${custom_Icon},
+search_text: ${search_text},
+searchQuery: ${searchQuery}
     ''';
   }
 }
