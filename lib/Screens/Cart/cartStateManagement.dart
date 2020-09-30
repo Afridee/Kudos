@@ -18,7 +18,7 @@ abstract class cartState with Store{
   @action
   getUserID(BuildContext context) async{
     final auth  = Provider.of<FirebaseAuthService>(context, listen: false);
-    userID = await auth.getCurrentUserUID();
+    await auth.getCurrentUserUID();
   }
 
   @action

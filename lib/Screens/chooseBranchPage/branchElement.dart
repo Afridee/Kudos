@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kudos/Constants.dart';
 import 'package:kudos/Screens/Home.dart';
+import 'package:kudos/Screens/loginPages/firebase_auth_service.dart';
+import 'package:provider/provider.dart';
 
 class branch extends StatelessWidget {
 
@@ -66,6 +68,10 @@ class branch extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
+                final auth  = Provider.of<FirebaseAuthService>(context, listen: false);
+                print(auth.userID);
+                print(auth.userInfoGiven);
+                print(auth.userInfo);
                 var route = new MaterialPageRoute(
                   builder: (BuildContext context) =>
                   new Home(),

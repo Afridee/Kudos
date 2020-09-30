@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kudos/Screens/loginPages/emaiLogInStateManagement.dart';
 import 'package:kudos/Screens/loginPages/phoneNumberStateManagement.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fba;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -12,15 +13,29 @@ class User {
   final String uid;
 }
 
-class FirebaseAuthService {
-  final _firebaseAuth = FirebaseAuth.instance;
+class FirebaseAuthService extends ChangeNotifier{
 
-  User _userFromFirebase(FirebaseUser user) {
+  final _firebaseAuth = fba.FirebaseAuth.instance;
+
+  FirebaseAuthService(){
+    getCurrentUserUID();
+  }
+
+  String _userID = '';
+  String get userID => _userID;
+
+  bool _userInfoGiven = true;
+  bool get userInfoGiven => _userInfoGiven;
+
+  Map<String, dynamic> _userInfo;
+  Map<String, dynamic> get userInfo => _userInfo;
+
+  User _userFromFirebase(fba.User user) {
     return user == null ? null : User(uid: user.uid);
   }
 
   Stream<User> get onAuthStateChanged {
-    return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   Future<User> signInAnonymously() async {
@@ -34,9 +49,8 @@ class FirebaseAuthService {
 
         final FacebookAccessToken accessToken = result.accessToken;
 
-        final authResult = await  FirebaseAuth.instance.signInWithCredential(
-          FacebookAuthProvider.getCredential(
-              accessToken: accessToken.token),
+        final authResult = await  fba.FirebaseAuth.instance.signInWithCredential(
+          fba.FacebookAuthProvider.credential(accessToken.token),
         );
 
         return _userFromFirebase(authResult.user);
@@ -51,44 +65,69 @@ class FirebaseAuthService {
         );
 
         final GoogleSignInAccount googleUser = await _googleSignIn.signIn().catchError((onError) {});
-        final GoogleSignInAccount currentUser = _googleSignIn.currentUser;
+        //final GoogleSignInAccount currentUser = _googleSignIn.currentUser;
         final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-        final AuthCredential credential = GoogleAuthProvider.getCredential(
+        final fba.AuthCredential credential = fba.GoogleAuthProvider.credential(
             idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
-        final FirebaseUser user = (await _firebaseAuth.signInWithCredential(credential)).user;
+        final fba.User user = (await _firebaseAuth.signInWithCredential(credential)).user;
 
         return _userFromFirebase(user);
   }
 
-  Future<String> getCurrentUserUID() async {
-    final auth = FirebaseAuth.instance;
-    final FirebaseUser user = await auth.currentUser();
-    String userID = user.uid;
+    getCurrentUserUID(){
+      try{
+        final auth = fba.FirebaseAuth.instance;
+        final fba.User user = auth.currentUser;
+        _userID = user.uid;
+        notifyListeners();
+        if(_userID!=null){
+          getCurrentUserINFO();
+        }
+      }catch(e){
+        print(e);
+      }
+  }
 
-    return userID;
+  getCurrentUserINFO() async{
+    try {
+      await FirebaseFirestore.instance.doc("users/${userID}").get().then((doc) {
+        if (doc.exists){
+          _userInfoGiven = true;
+          _userInfo = doc.data();
+          notifyListeners();
+        }
+        else{
+          _userInfoGiven = false;
+          notifyListeners();
+        }
+      });
+    } catch (e) {
+       print(e);
+    }
   }
 
   Future<void> LogInWIthPhone(phoneNumberStateClass phoneState, BuildContext context) async{
 
-    final _firebaseAuth = FirebaseAuth.instance;
+    final _firebaseAuth = fba.FirebaseAuth.instance;
 
-    final PhoneVerificationCompleted verified = (AuthCredential authresult) async{
+    final fba.PhoneVerificationCompleted verified = (fba.AuthCredential authresult) async{
       await _firebaseAuth.signInWithCredential(authresult);
+      getCurrentUserUID();
       Navigator.of(context).pop();
     };
 
-    final PhoneVerificationFailed verificationfailed = (AuthException authException){
+    final fba.PhoneVerificationFailed verificationfailed = (fba.FirebaseAuthException authException){
         phoneState.getErrorWhileEnteringPhoneNumber('${authException.message}');
     };
 
-    final PhoneCodeSent smsSent = (String verId, [int forceResend]){
+    final fba.PhoneCodeSent smsSent = (String verId, [int forceResend]){
         phoneState.setverificationID(verId);
     };
 
 
-    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId){
+    final fba.PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId){
         phoneState.setverificationID(verId);
     };
 
@@ -98,7 +137,7 @@ class FirebaseAuthService {
         verificationCompleted: verified,
         verificationFailed: verificationfailed,
         codeSent: smsSent,
-        codeAutoRetrievalTimeout: null);
+        codeAutoRetrievalTimeout: autoTimeout);
   }
 
   Future<User> signUpWithEmail(emaiLogInStateClass emaiLogInState) async {
@@ -119,5 +158,7 @@ class FirebaseAuthService {
       emaiLogInState.getErrorWhileSigningIn(e.message);
     }
   }
+
+
 
 }

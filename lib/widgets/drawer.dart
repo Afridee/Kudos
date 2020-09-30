@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kudos/Constants.dart';
+import 'package:kudos/Screens/loginPages/firebase_auth_service.dart';
 import 'package:kudos/Screens/loginPages/loginFunctionalities.dart';
+import 'package:kudos/Screens/userProfile/Edit_or_complete_profile.dart';
+import 'package:provider/provider.dart';
 
 
 class mainDrawer extends StatefulWidget {
@@ -17,6 +20,7 @@ class _mainDrawerState extends State<mainDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final auth  = Provider.of<FirebaseAuthService>(context, listen: true);
     return Drawer(
         child: Column(
       children: [
@@ -37,7 +41,7 @@ class _mainDrawerState extends State<mainDrawer> {
                     radius: 60,
                     backgroundColor: primaryDark,
                     child: Text(
-                      'A',
+                      '${auth.userInfo['first_name']}'.toUpperCase().substring(0,1),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 44
@@ -47,7 +51,7 @@ class _mainDrawerState extends State<mainDrawer> {
                   Padding(
                     padding: const EdgeInsets.only(top: 13.0),
                     child: Text(
-                      'Ahmed Afridee',
+                      '${auth.userInfo['first_name']} ${auth.userInfo['last_name']}',
                       style: TextStyle(
                           color: primaryDark,
                           fontSize: 24
@@ -90,7 +94,12 @@ class _mainDrawerState extends State<mainDrawer> {
                       color: Colors.white,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    var route = new MaterialPageRoute(
+                      builder: (BuildContext context) => new infoForm(Title: 'Edit profile'),
+                    );
+                    Navigator.of(context).push(route);
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.location_on),

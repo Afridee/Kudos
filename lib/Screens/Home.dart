@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:kudos/Screens/loginPages/loginFunctionalities.dart';
 import 'package:kudos/widgets/drawer.dart';
 import 'package:kudos/widgets/menuItem/menuItem.dart';
 
@@ -153,7 +152,7 @@ class _HomeState extends State<Home> {
             child: Observer(
               builder: (context) {
                 return StreamBuilder(
-                    stream: Firestore.instance
+                    stream: FirebaseFirestore.instance
                             .collection('Menu')
                             .where('category', isEqualTo: HS.category)
                             .snapshots(),
@@ -162,9 +161,9 @@ class _HomeState extends State<Home> {
                           ? ListView.builder(
                               itemCount: snapshot.data.documents.length,
                               itemBuilder: (context, index) {
+                                print(snapshot.data.documents.length);
                                 return Observer(builder: (context) {
-                                  return snapshot
-                                          .data.documents[index]['itemName']
+                                  return  snapshot.data.documents[index].get('itemName')
                                           .toString()
                                           .trim()
                                           .toLowerCase()
@@ -172,14 +171,10 @@ class _HomeState extends State<Home> {
                                               .trim()
                                               .toLowerCase())
                                       ? menuItem(
-                                          img: snapshot.data.documents[index]
-                                              ['img'],
-                                          itemName: snapshot.data
-                                              .documents[index]['itemName'],
-                                          desc: snapshot.data.documents[index]
-                                              ['desc'],
-                                          price: snapshot.data.documents[index]
-                                              ['price'],
+                                          img: snapshot.data.documents[index].get('img'),
+                                          itemName: snapshot.data.documents[index].get('itemName'),
+                                          desc: snapshot.data.documents[index].get('desc'),
+                                          price: snapshot.data.documents[index].get('price'),
                                         )
                                       : Container();
                                 });
