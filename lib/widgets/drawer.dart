@@ -41,10 +41,10 @@ class _mainDrawerState extends State<mainDrawer> {
                     radius: 60,
                     backgroundColor: primaryDark,
                     child: Text(
-                      '${auth.userInfo['first_name']}'.toUpperCase().substring(0,1),
+                      '${auth.userInfo['first_name']}'.toUpperCase().substring(0,1)+'${auth.userInfo['last_name']}'.toUpperCase().substring(0,1),
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 44
+                        fontSize: 38
                       ),
                     ),
                   ),

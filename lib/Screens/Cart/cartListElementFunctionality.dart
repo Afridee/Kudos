@@ -13,6 +13,14 @@ bool add(String itemName, int qty, double price){
       'price' : price
     });
 
+//    cartBox.values.forEach((element) {
+//      print(element);
+//    });
+//
+//    cartBox.keys.forEach((element) {
+//      print(element);
+//    });
+
     return true;
   }catch(e){
     return false;

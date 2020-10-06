@@ -66,6 +66,11 @@ class _login_pageState extends State<login_page> {
         body: Observer(builder: (context){
           return ModalProgressHUD(
             inAsyncCall: LS.Spinner,
+            progressIndicator: CircularProgressIndicator(
+              valueColor:
+              new AlwaysStoppedAnimation<Color>(Colors.white),
+              backgroundColor: primaryDark,
+            ),
             child: SingleChildScrollView(
               child: Container(
                 decoration: BoxDecoration(
